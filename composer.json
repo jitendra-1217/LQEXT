@@ -25,5 +25,12 @@
         "psr-4": {
             "Jitendra\\Lqstuff\\": "src/"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Jitendra\\Lqstuff\\ServiceProvider"
+            ]
+        }
     }
 }

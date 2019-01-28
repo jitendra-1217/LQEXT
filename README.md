@@ -1,2 +1,2 @@
 # lqstuff
-Laravel queue enhancements, failure handling & retries.
+Enhancements around Laravel's Event, Queue & Mailable.
