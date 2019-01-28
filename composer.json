@@ -1,0 +1,29 @@
+{
+    "name": "jitendra/lqstuff",
+    "description": "Laravel queue enhancements, failure handling & retries.",
+    "type": "library",
+    "require": {
+        "php": "^7.0",
+        "illuminate/support": "5.5.* || 5.6.* || 5.7.*",
+        "illuminate/events": "5.5.* || 5.6.* || 5.7.*",
+        "illuminate/contracts": "5.5.* || 5.6.* || 5.7.*",
+        "illuminate/bus": "5.5.* || 5.6.* || 5.7.*",
+        "illuminate/mail": "5.5.* || 5.6.* || 5.7.*",
+        "illuminate/database": "5.5.* || 5.6.* || 5.7.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.5",
+        "squizlabs/php_codesniffer": "^3.3"
+    },
+    "authors": [
+        {
+            "name": "jitendra-1217",
+            "email": "jitendraojha1217@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Jitendra\\Lqstuff\\": "src/"
+        }
+    }
+}
