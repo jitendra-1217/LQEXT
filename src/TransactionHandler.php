@@ -3,6 +3,7 @@
 namespace Jitendra\Lqstuff;
 
 use Closure;
+use Psr\Log\LoggerInterface;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Events\TransactionBeginning;
@@ -11,6 +12,11 @@ use Illuminate\Database\Events\TransactionRolledBack;
 
 class TransactionHandler
 {
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
     /**
      * @var array
      */
@@ -28,9 +34,10 @@ class TransactionHandler
      */
     protected $pendingHandlers;
 
-    public function __construct(Dispatcher $dispatcher, array $config)
+    public function __construct(Dispatcher $dispatcher, LoggerInterface $logger, array $config)
     {
         $this->setTransactionListeners($dispatcher);
+        $this->logger = $logger;
         $this->config = $config;
         $this->transactions = [];
         $this->pendingHandlers = [];
@@ -46,7 +53,7 @@ class TransactionHandler
         if ($this->shouldBeSync($command)) {
             return $callback();
         } else {
-            $this->pushPendingHandler($handler);
+            $this->pushPendingHandler($callback);
         }
     }
 
@@ -57,6 +64,7 @@ class TransactionHandler
     public function pushPendingHandler(Closure $callback)
     {
         $this->pendingHandlers[count($this->transactions)][] = $callback;
+        $this->logger->debug("Pending handler pushed");
     }
 
     /**
@@ -116,11 +124,12 @@ class TransactionHandler
     protected function transactionBeginning(Connection $connection)
     {
         array_unshift($this->transactions, $connection->getName());
+        $this->logger->debug('New transaction begins');
     }
 
     protected function transactionCommitted(Connection $connection)
     {
-        $pendingHandlers = $this->pendingHandlers[count($this->transactions)];
+        $pendingHandlers = $this->pendingHandlers[count($this->transactions)] ?? [];
         array_shift($this->transactions);
         // If a wrapping transaction exists with same connection name at a level
         // above, merge pending handlers of this level with that one.
@@ -128,16 +137,20 @@ class TransactionHandler
         if (($level = array_search($connection->getName(), $this->transactions))) {
             $level++;
             $this->pendingHandlers[$level] = array_merge($this->pendingHandlers[$level], $pendingHandlers);
+            $this->logger->debug("Pending handlers moved to wrapping transaction on same connection");
         } else {
             foreach ($pendingHandlers as $handler) {
                 $handler();
+                $this->logger->debug("Pending handler executed");
             }
         }
+        $this->logger->debug('Transaction committed');
     }
 
     protected function transactionRolledBack(Connection $connection)
     {
         unset($this->pendingHandlers[count($this->transactions)]);
         array_shift($this->transactions);
+        $this->logger->debug('Transaction rolled back');
     }
 }

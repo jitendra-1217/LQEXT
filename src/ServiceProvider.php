@@ -17,7 +17,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->app->singleton(
             TransactionHandler::class,
             function () use ($config) {
-                return new TransactionHandler($this->app->events, $config);
+                return new TransactionHandler($this->app->events, $this->app->log, $config);
             }
         );
         // Following 3 Laravel's services are extended to provide package's
@@ -30,8 +30,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             }
         );
         $this->app->extend(
-            \Illuminate\Contracts\Bus\Dispatcher::class,
-            function (\Illuminate\Contracts\Bus\Dispatcher $dispatcher) {
+            \Illuminate\Bus\Dispatcher::class,
+            function (\Illuminate\Bus\Dispatcher $dispatcher) {
                 return new BusDispatcher($this->app->make(TransactionHandler::class), $dispatcher);
             }
         );

@@ -24,7 +24,10 @@
     "autoload": {
         "psr-4": {
             "Jitendra\\Lqstuff\\": "src/"
-        }
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "extra": {
         "laravel": {

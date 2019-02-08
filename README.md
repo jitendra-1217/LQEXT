@@ -1,2 +1,2 @@
 # lqstuff
-Enhancements around Laravel's Event, Queue & Mailable.
+Database transaction aware laravel's dispatcher for queue, mailable & events.
