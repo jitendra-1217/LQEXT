@@ -1,6 +1,6 @@
 <?php
 
-namespace Jitendra\Lqstuff;
+namespace Jitendra\Lqext;
 
 trait TransactionAware
 {

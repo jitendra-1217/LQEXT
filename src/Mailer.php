@@ -1,6 +1,6 @@
 <?php
 
-namespace Jitendra\Lqstuff;
+namespace Jitendra\Lqext;
 
 class Mailer extends Decorated implements \Illuminate\Contracts\Mail\Mailer
 {

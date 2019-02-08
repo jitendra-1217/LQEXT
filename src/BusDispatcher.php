@@ -1,6 +1,6 @@
 <?php
 
-namespace Jitendra\Lqstuff;
+namespace Jitendra\Lqext;
 
 use Illuminate\Contracts\Bus\Dispatcher;
 

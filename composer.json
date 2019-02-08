@@ -1,5 +1,5 @@
 {
-    "name": "jitendra/lqstuff",
+    "name": "jitendra/lqext",
     "description": "Laravel queue enhancements, failure handling & retries.",
     "type": "library",
     "require": {
@@ -23,7 +23,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Jitendra\\Lqstuff\\": "src/"
+            "Jitendra\\Lqext\\": "src/"
         },
         "files": [
             "src/helpers.php"
@@ -32,7 +32,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Jitendra\\Lqstuff\\ServiceProvider"
+                "Jitendra\\Lqext\\ServiceProvider"
             ]
         }
     }

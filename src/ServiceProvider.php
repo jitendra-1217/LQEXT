@@ -1,6 +1,6 @@
 <?php
 
-namespace Jitendra\Lqstuff;
+namespace Jitendra\Lqext;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
@@ -9,8 +9,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/config.php', 'lqstuff');
-        $config = $this->app->config->get('lqstuff');
+        $this->mergeConfigFrom(__DIR__.'/config.php', 'lqext');
+        $config = $this->app->config->get('lqext');
         if (! $config['enable']) {
             return;
         }
@@ -50,7 +50,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         $this->publishes(
             [
-                __DIR__.'/config.php' => $this->app->basePath().'/config/lqstuff.php',
+                __DIR__.'/config.php' => $this->app->basePath().'/config/lqext.php',
             ]
         );
     }
