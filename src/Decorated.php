@@ -5,22 +5,19 @@ namespace Jitendra\Lqext;
 abstract class Decorated
 {
     /**
-     * @var TransactionHandler
-     */
-    protected $transactionHandler;
-
-    /**
      * @var mixed
      */
     protected $instance;
 
     /**
-     * @param mixed $instance
+     * @var TransactionHandler|null
      */
-    public function __construct(TransactionHandler $transactionHandler, $instance)
+    protected $transactionHandler;
+
+    public function __construct($instance, TransactionHandler $transactionHandler = null)
     {
-        $this->transactionHandler = $transactionHandler;
         $this->instance = $instance;
+        $this->transactionHandler = $transactionHandler;
     }
 
     /**
