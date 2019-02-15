@@ -2,6 +2,10 @@
 
 namespace Jitendra\Lqext;
 
+/**
+ * An object of Decorated class will override few methods of underlying
+ * instance and just pass through rest methods.
+ */
 abstract class Decorated
 {
     /**
@@ -14,8 +18,10 @@ abstract class Decorated
      */
     protected $transactionHandler;
 
-    public function __construct($instance, TransactionHandler $transactionHandler = null)
-    {
+    public function __construct(
+        $instance,
+        TransactionHandler $transactionHandler = null
+    ) {
         $this->instance = $instance;
         $this->transactionHandler = $transactionHandler;
     }

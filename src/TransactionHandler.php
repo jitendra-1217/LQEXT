@@ -34,8 +34,11 @@ class TransactionHandler
      */
     protected $pendingHandlers;
 
-    public function __construct(Dispatcher $dispatcher, LoggerInterface $logger, array $config)
-    {
+    public function __construct(
+        Dispatcher $dispatcher,
+        LoggerInterface $logger,
+        array $config
+    ) {
         $this->setTransactionListeners($dispatcher);
         $this->logger = $logger;
         $this->config = $config;
@@ -64,7 +67,7 @@ class TransactionHandler
     public function pushPendingHandler(Closure $callback)
     {
         $this->pendingHandlers[count($this->transactions)][] = $callback;
-        $this->logger->debug("Pending handler pushed");
+        $this->logger->debug('Pending handler pushed');
     }
 
     /**
@@ -137,11 +140,11 @@ class TransactionHandler
         if (($level = array_search($connection->getName(), $this->transactions))) {
             $level++;
             $this->pendingHandlers[$level] = array_merge($this->pendingHandlers[$level], $pendingHandlers);
-            $this->logger->debug("Pending handlers moved to wrapping transaction on same connection");
+            $this->logger->debug('Pending handlers moved to wrapping transaction on same connection');
         } else {
             foreach ($pendingHandlers as $handler) {
                 $handler();
-                $this->logger->debug("Pending handler executed");
+                $this->logger->debug('Pending handler executed');
             }
         }
         $this->logger->debug('Transaction committed');

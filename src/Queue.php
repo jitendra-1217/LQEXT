@@ -16,8 +16,11 @@ class Queue extends Decorated implements \Illuminate\Contracts\Queue\Queue
      */
     protected $logger;
 
-    public function __construct(\Illuminate\Contracts\Queue\Queue $queue, Storage $storage, LoggerInterface $logger)
-    {
+    public function __construct(
+        \Illuminate\Contracts\Queue\Queue $queue,
+        Storage $storage,
+        LoggerInterface $logger
+    ) {
         parent::__construct($queue);
         $this->storage = $storage;
         $this->logger = $logger;
@@ -39,10 +42,9 @@ class Queue extends Decorated implements \Illuminate\Contracts\Queue\Queue
     {
         try {
             $this->logger->debug('Pushing job onto queue');
-            throw new \Exception("Error Processing Request", 1);
             return $this->instance->push($job, $data, $queue);
         } catch (\Throwable $e) {
-            $this->logger->debug('Failed to push job onto queue, logging for later push');
+            $this->logger->debug('Job failed to push, logging for later push');
             $this->storage->write(
                 uniqid(),
                 json_encode(
@@ -84,7 +86,7 @@ class Queue extends Decorated implements \Illuminate\Contracts\Queue\Queue
             $this->logger->debug('Pushing job onto queue');
             return $this->instance->later($delay, $job, $data, $queue);
         } catch (\Throwable $e) {
-            $this->logger->debug('Failed to push job onto queue, logging for later push');
+            $this->logger->debug('Job failed to push, logging for later push');
             $this->storage->write(
                 uniqid(),
                 json_encode(

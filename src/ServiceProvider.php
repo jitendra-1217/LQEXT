@@ -15,7 +15,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             $this->app->singleton(
                 TransactionHandler::class,
                 function () use ($config) {
-                    return new TransactionHandler($this->app->events, $this->app->log, $config);
+                    return new TransactionHandler(
+                        $this->app->events,
+                        $this->app->log,
+                        $config
+                    );
                 }
             );
             // Following 3 Laravel's services are extended to provide package's
@@ -24,19 +28,28 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             $this->app->extend(
                 'events',
                 function (\Illuminate\Contracts\Events\Dispatcher $dispatcher) {
-                    return new EventsDispatcher($dispatcher, $this->app->make(TransactionHandler::class));
+                    return new EventsDispatcher(
+                        $dispatcher,
+                        $this->app->make(TransactionHandler::class)
+                    );
                 }
             );
             $this->app->extend(
                 \Illuminate\Bus\Dispatcher::class,
                 function (\Illuminate\Bus\Dispatcher $dispatcher) {
-                    return new BusDispatcher($dispatcher, $this->app->make(TransactionHandler::class));
+                    return new BusDispatcher(
+                        $dispatcher,
+                        $this->app->make(TransactionHandler::class)
+                    );
                 }
             );
             $this->app->extend(
                 'mailer',
                 function (\Illuminate\Contracts\Mail\Mailer $mailer) {
-                    return new Mailer($mailer, $this->app->make(TransactionHandler::class));
+                    return new Mailer(
+                        $mailer,
+                        $this->app->make(TransactionHandler::class)
+                    );
                 }
             );
         }
@@ -44,7 +57,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             $this->app->extend(
                 'queue',
                 function (\Illuminate\Contracts\Queue\Factory $factory) {
-                    return new QueueManager($factory, new FileStorage, $this->app->log);
+                    return new QueueManager(
+                        $factory,
+                        new FileStorage,
+                        $this->app->log
+                    );
                 }
             );
         }
