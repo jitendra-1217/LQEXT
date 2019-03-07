@@ -2,28 +2,32 @@
 
 return [
 
-    // Configuration for transaction handling.
+    // Configuration for making events, bus dispatcher and mailer services
+    // transaction aware.
     'transaction' => [
 
-        // Specifies whether decoration of events, bus & mailer service is
-        // enabled.
-        'enable' => env('LQEXT_TRANSACTION_ENABLE', false),
+        // Specifies whether to enable this extension.
+        'enable' => env('LQEXT_ENABLE_TXN_AWARE', false),
 
         // Whitelisted events, commands, mailable names which are to be
-        // transaction aware. Alternatively a class can use TransactionAware
-        // trait.
+        // transaction aware.
+        // Alternatively a class can use TransactionAware trait.
         'whitelist' => [
         ],
     ],
 
-    // Configuration for queue push error handling.
+    // Configuration for handling failures during queue push to remove services.
     'queue' => [
 
-        // Specifies whether to enable queue push error handling.
-        'enable' => env('LQEXT_QUEUE_ENABLE', false),
+        // Specifies whether to enable this extension.
+        'enable' => env('LQEXT_ENABLE_QUEUE_FAILURE_HANDLING', false),
 
-        // Specifies storage driver to use to write/read queue messages which
-        // fails to push to original target.
-        // 'storage' => env('LQEXT_QUEUE_STORAGE', 'file'),
+        // Redis storage driver which is only implementation for now is used to
+        // write/read queue messages which fails to push to original target.
+        'redis' => [
+
+            // Laravel's redis connection name.
+            'connection' => env('LQEXT_REDIS_CONNECTION_NAME', 'default'),
+        ],
     ],
 ];

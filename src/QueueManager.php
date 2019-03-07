@@ -51,4 +51,27 @@ class QueueManager extends Decorated implements Factory
             $this->logger
         );
     }
+
+    /**
+     * Replays jobs that failed while pushing.
+     * @param int $limit
+     */
+    public function replayPushFailedJobs(int $limit)
+    {
+        while ($limit-- && ($payloadJson = $this->storage->pop())) {
+            list (
+                $connectionName,
+                $queueName,
+                $delay,
+                $serializedJob,
+                $data) = json_decode($payloadJson, true);
+            $job = unserialize($serializedJob);
+            $connection = $this->connection($connectionName);
+            if ($delay > 0) {
+                $connection->laterOn($queueName, $delay, $job, $data);
+            } else {
+                $connection->pushOn($queueName, $job, $data);
+            }
+        }
+    }
 }
