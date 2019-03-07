@@ -5,8 +5,12 @@ namespace Jitendra\Lqext;
 interface Storage
 {
     /**
-     * @param string       $key
-     * @param string|array $data
+     * @param string $data
      */
-    public function write(string $key, $data);
+    public function push(string $data);
+
+    /**
+     * @return string|null
+     */
+    public function pop();
 }

@@ -45,15 +45,14 @@ class Queue extends Decorated implements \Illuminate\Contracts\Queue\Queue
             return $this->instance->push($job, $data, $queue);
         } catch (\Throwable $e) {
             $this->logger->debug('Job failed to push, logging for later push');
-            $this->storage->write(
-                uniqid(),
+            $this->storage->push(
                 json_encode(
                     [
                         $this->getConnectionName(),
+                        $queue,
                         0,
                         serialize(is_object($job) ? clone $job : $job),
                         $data,
-                        $queue,
                     ]
                 )
             );
@@ -65,7 +64,7 @@ class Queue extends Decorated implements \Illuminate\Contracts\Queue\Queue
      */
     public function pushOn($queue, $job, $data = '')
     {
-        return $this->instance->pushOn($queue, $job, $data);
+        return $this->push($job, $data, $queue);
     }
 
     /**
@@ -87,15 +86,14 @@ class Queue extends Decorated implements \Illuminate\Contracts\Queue\Queue
             return $this->instance->later($delay, $job, $data, $queue);
         } catch (\Throwable $e) {
             $this->logger->debug('Job failed to push, logging for later push');
-            $this->storage->write(
-                uniqid(),
+            $this->storage->push(
                 json_encode(
                     [
                         $this->getConnectionName(),
+                        $queue,
                         $delay,
                         serialize(is_object($job) ? clone $job : $job),
                         $data,
-                        $queue,
                     ]
                 )
             );
@@ -107,7 +105,7 @@ class Queue extends Decorated implements \Illuminate\Contracts\Queue\Queue
      */
     public function laterOn($queue, $delay, $job, $data = '')
     {
-        return $this->instance->laterOn($queue, $delay, $job, $data);
+        return $this->later($delay, $job, $data, $queue);
     }
 
     /**

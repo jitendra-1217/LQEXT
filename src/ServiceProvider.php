@@ -2,6 +2,8 @@
 
 namespace Jitendra\Lqext;
 
+use Illuminate\Support\Facades\Redis;
+
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
     /**
@@ -56,10 +58,13 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         if ($config['queue']['enable']) {
             $this->app->extend(
                 'queue',
-                function (\Illuminate\Contracts\Queue\Factory $factory) {
+                function (\Illuminate\Contracts\Queue\Factory $factory) use ($config) {
                     return new QueueManager(
                         $factory,
-                        new FileStorage,
+                        new RedisStorage(
+                            Redis::connection($config['queue']['redis']['connection']),
+                            $this->app->log,
+                        ),
                         $this->app->log
                     );
                 }
