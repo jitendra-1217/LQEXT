@@ -53,10 +53,10 @@ class QueueManager extends Decorated implements Factory
     }
 
     /**
-     * Replays jobs that failed while pushing.
+     * Retries jobs that failed while pushing.
      * @param int $limit
      */
-    public function replayPushFailedJobs(int $limit)
+    public function retryFailedToPushJobs(int $limit = 1000)
     {
         while ($limit-- && ($payloadJson = $this->storage->pop())) {
             list (
