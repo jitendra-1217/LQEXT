@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/jitendra-1217/lqext.svg?branch=master)](https://travis-ci.org/jitendra-1217/lqext)
+
 # lqext
 
 **Work in progress!**
