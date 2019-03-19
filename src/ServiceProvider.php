@@ -14,18 +14,13 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/config.php', 'lqext');
         $config = $this->app->config->get('lqext');
         if ($config['transaction']['enable']) {
-            $this->app->afterResolving(
-                'events',
-                function (\Illuminate\Contracts\Events\Dispatcher $dispatcher) use ($config) {
-                    $this->app->singleton(
-                        TransactionHandler::class,
-                        function () use ($config, $dispatcher) {
-                            return new TransactionHandler(
-                                $dispatcher,
-                                $this->app->log,
-                                $config
-                            );
-                        }
+            $this->app->singleton(
+                TransactionHandler::class,
+                function () use ($config) {
+                    return new TransactionHandler(
+                        $this->app->events,
+                        $this->app->log,
+                        $config
                     );
                 }
             );
@@ -37,9 +32,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
                 function (\Illuminate\Contracts\Events\Dispatcher $dispatcher) {
                     return new EventsDispatcher(
                         $dispatcher,
-                        function () {
-                            return $this->app->make(TransactionHandler::class);
-                        }
+                        $this->app->make(TransactionHandler::class)
                     );
                 }
             );
@@ -48,9 +41,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
                 function (\Illuminate\Bus\Dispatcher $dispatcher) {
                     return new BusDispatcher(
                         $dispatcher,
-                        function () {
-                            return $this->app->make(TransactionHandler::class);
-                        }
+                        $this->app->make(TransactionHandler::class)
                     );
                 }
             );
@@ -59,9 +50,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
                 function (\Illuminate\Contracts\Mail\Mailer $mailer) {
                     return new Mailer(
                         $mailer,
-                        function () {
-                            return $this->app->make(TransactionHandler::class);
-                        }
+                        $this->app->make(TransactionHandler::class)
                     );
                 }
             );

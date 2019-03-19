@@ -14,10 +14,10 @@ class EventsDispatcher extends Decorated implements Dispatcher
         $handler = function () use ($event, $payload, $halt) {
             return $this->instance->dispatch($event, $payload, $halt);
         };
-        if ($halt || $this->getTransactionHandler()->shouldBeSync($event)) {
+        if ($halt || $this->transactionHandler->shouldBeSync($event)) {
             return $handler();
         }
-        $this->getTransactionHandler()->pushPendingHandler($handler);
+        $this->transactionHandler->pushPendingHandler($handler);
     }
 
     /**

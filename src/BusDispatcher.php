@@ -11,7 +11,7 @@ class BusDispatcher extends Decorated implements Dispatcher
      */
     public function dispatch($command)
     {
-        return $this->getTransactionHandler()->handler(
+        return $this->transactionHandler->handler(
             $command,
             function () use ($command) {
                 return $this->instance->dispatch($command);
