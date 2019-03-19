@@ -9,7 +9,7 @@ class Mailer extends Decorated implements \Illuminate\Contracts\Mail\Mailer
      */
     public function queue($view, $queue = null)
     {
-        return $this->transactionHandler->handler(
+        return $this->getTransactionHandler()->handler(
             $view,
             function () use ($view, $queue) {
                 return $this->instance->queue($view, $queue);
@@ -22,7 +22,7 @@ class Mailer extends Decorated implements \Illuminate\Contracts\Mail\Mailer
      */
     public function later($delay, $view, $queue = null)
     {
-        return $this->transactionHandler->handler(
+        return $this->getTransactionHandler()->handler(
             $view,
             function () use ($delay, $view, $queue) {
                 return $this->instance->later($delay, $view, $queue);
