@@ -2,16 +2,15 @@
 
 # lqext
 
-__Important:__ Because of [a minor issue](https://github.com/laravel/framework/issues/27825) in framework's code the logging queue  
-push failures part errors right now. Please wait.
-
 ## What
 1) Makes Laravel's dispatchers which are buses, events & mailable, transaction  
 aware. I.e. dispatching events, jobs or mailable, be it queued or sync in  
 complex flows, inside nested transaction etc will work as normal expectation.  
 
-2) Makes Laravel's queued dispatcher to log failures to redis storage and  
-adds support for re attempting those failed remote pushes.  
+2) ~Makes Laravel's queued dispatcher to log failures to redis storage and  
+adds support for re attempting those failed remote pushes.~  Because of [a minor  
+issue](https://github.com/laravel/framework/issues/27825) in framework's code the logging queue push failures part errors right.  
+now. Please wait while a workaround is added.  
 
 ## How
 Thanks to framework's design which allows extending any service of its easily  

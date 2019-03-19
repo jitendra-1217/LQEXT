@@ -4,6 +4,9 @@ namespace Jitendra\Lqext;
 
 use Psr\Log\LoggerInterface;
 
+/**
+ * @see readme.md Unused class for now.
+ */
 class RedisStorage implements Storage
 {
     const FAILED_JOBS_LIST_NAME = 'lqext:failed_jobs';

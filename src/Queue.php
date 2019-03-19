@@ -4,6 +4,9 @@ namespace Jitendra\Lqext;
 
 use Psr\Log\LoggerInterface;
 
+/**
+ * @see readme.md Unused class for now.
+ */
 class Queue extends Decorated implements \Illuminate\Contracts\Queue\Queue
 {
     /**

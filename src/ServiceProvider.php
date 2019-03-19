@@ -55,21 +55,24 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
                 }
             );
         }
-        if ($config['queue']['enable']) {
-            $this->app->extend(
-                'queue',
-                function (\Illuminate\Contracts\Queue\Factory $factory) use ($config) {
-                    return new QueueManager(
-                        $factory,
-                        new RedisStorage(
-                            Redis::connection($config['queue']['redis']['connection']),
-                            $this->app->log,
-                        ),
-                        $this->app->log
-                    );
-                }
-            );
-        }
+        /**
+         * @see readme.md
+         */
+        // if ($config['queue']['enable']) {
+        //     $this->app->extend(
+        //         'queue',
+        //         function (\Illuminate\Contracts\Queue\Factory $factory) use ($config) {
+        //             return new QueueManager(
+        //                 $factory,
+        //                 new RedisStorage(
+        //                     Redis::connection($config['queue']['redis']['connection']),
+        //                     $this->app->log,
+        //                 ),
+        //                 $this->app->log
+        //             );
+        //         }
+        //     );
+        // }
     }
 
     /**

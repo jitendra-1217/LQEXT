@@ -5,6 +5,9 @@ namespace Jitendra\Lqext;
 use Psr\Log\LoggerInterface;
 use Illuminate\Contracts\Queue\Factory;
 
+/**
+ * @see readme.md Unused class for now.
+ */
 class QueueManager extends Decorated implements Factory
 {
     /**

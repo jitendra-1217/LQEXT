@@ -16,6 +16,9 @@ return [
         ],
     ],
 
+    /**
+     * @see readme.md Unused configurations for now.
+     */
     // Configuration for handling failures during queue push to remove services.
     'queue' => [
 

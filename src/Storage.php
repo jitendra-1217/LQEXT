@@ -2,6 +2,9 @@
 
 namespace Jitendra\Lqext;
 
+/**
+ * @see readme.md Unused interface for now.
+ */
 interface Storage
 {
     /**
