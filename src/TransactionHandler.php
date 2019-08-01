@@ -37,8 +37,8 @@ class TransactionHandler
     public function __construct(
         Dispatcher $dispatcher,
         LoggerInterface $logger,
-        array $config)
-    {
+        array $config
+    ) {
         $this->setTransactionListeners($dispatcher);
         $this->logger = $logger;
         $this->config = $config;
@@ -83,10 +83,12 @@ class TransactionHandler
                 in_array(TransactionAware::class, class_uses_recursive($object));
             $isWhitelisted = in_array(
                 is_object($object) ? get_class($object) : $object,
-                $this->config['transaction']['whitelist']);
-            return !($isTransactionAware || $isWhitelisted);
+                $this->config['transaction']['whitelist']
+            );
+            return ! $isTransactionAware && ! $isWhitelisted;
+        } else {
+            return true;
         }
-        return true;
     }
 
     /**
