@@ -34,6 +34,12 @@ class TransactionHandler
      */
     protected $pendingHandlers;
 
+    /**
+     * Count of the number of transaction skipped
+     * @var int
+     */
+    protected $testingTxnSkipCount = 0;
+
     public function __construct(
         Dispatcher $dispatcher,
         LoggerInterface $logger,
@@ -126,6 +132,13 @@ class TransactionHandler
 
     protected function transactionBeginning(Connection $connection)
     {
+        if (($this->config['transaction']['testing'] === true) and
+            ($this->testingTxnSkipCount < $this->config['transaction']['testing_txn_skip_count']))
+        {
+            $this->logger->debug('Testing transaction skipped');
+            $this->testingTxnSkipCount++;
+            return;
+        }
         array_unshift($this->transactions, $connection->getName());
         $this->logger->debug('New transaction begins');
     }
