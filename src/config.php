@@ -9,15 +9,12 @@ return [
         // Specifies whether to enable this extension.
         'enable' => env('LQEXT_ENABLE_TXN_AWARE', false),
 
-        // Specifies if the environment is testing
-        'testing' => env('LQEXT_ENV_TESTING', false),
-
         // This is the number of transactions to skip in testing mode
         // This has been added since tests are wrapped in a tnx which
         // is rolled back at the end of the test, therefore events were
         // not getting fired. Using this we can skip the given number of
-        // transactions. This has been kept as configurable becasue there
-        // can be more than 1 database whihc is being used
+        // transactions. This has been kept as configurable because there
+        // can be more than 1 database which is being used
         'testing_txn_skip_count' => env('LQEXT_TESTING_TXN_SKIP_COUNT', 1),
 
         // Whitelisted events, commands, mailable names which are to be

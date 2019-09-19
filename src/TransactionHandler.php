@@ -132,9 +132,8 @@ class TransactionHandler
 
     protected function transactionBeginning(Connection $connection)
     {
-        if (($this->config['transaction']['testing'] === true) and
-            ($this->testingTxnSkipCount < $this->config['transaction']['testing_txn_skip_count']))
-        {
+        if (env('APP_ENV') === 'testing' &&
+            $this->testingTxnSkipCount < $this->config['transaction']['testing_txn_skip_count']) {
             $this->logger->debug('Testing transaction skipped');
             $this->testingTxnSkipCount++;
             return;
