@@ -145,6 +145,7 @@ class TransactionHandler
     protected function transactionCommitted(Connection $connection)
     {
         $pendingHandlers = $this->pendingHandlers[count($this->transactions)] ?? [];
+        unset($this->pendingHandlers[count($this->transactions)]);
         array_shift($this->transactions);
         // If a wrapping transaction exists with same connection name at a level
         // above, merge pending handlers of this level with that one.
