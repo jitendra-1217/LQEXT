@@ -73,7 +73,20 @@ class TransactionHandler
     public function pushPendingHandler(Closure $callback)
     {
         $this->pendingHandlers[count($this->transactions)][] = $callback;
-        $this->logger->debug('Pending handler pushed');
+
+        $debugData = [];
+
+        if ($this->isDebugMode() === true)
+        {
+            $debugData = [
+                'trace'        => $this->getLimitedStackTrace(),
+                'connection'   => $this->transactions[0],
+                'pushed_level' => count($this->transactions),
+            ];
+
+        }
+
+        $this->logger->debug('Pending handler pushed', $debugData);
     }
 
     /**
@@ -139,34 +152,104 @@ class TransactionHandler
             return;
         }
         array_unshift($this->transactions, $connection->getName());
-        $this->logger->debug('New transaction begins');
+
+        $debugData = [];
+
+        if ($this->isDebugMode() === true)
+        {
+            $debugData = [
+                'connection'   => $connection->getName(),
+                'current_level' => count($this->transactions),
+            ];
+
+        }
+
+        $this->logger->debug('New transaction begins', $debugData);
     }
 
     protected function transactionCommitted(Connection $connection)
     {
         $pendingHandlers = $this->pendingHandlers[count($this->transactions)] ?? [];
         unset($this->pendingHandlers[count($this->transactions)]);
+
+        $debugData = [];
+
+        if ($this->isDebugMode() === true)
+        {
+            $debugData = [
+                'connection'                     => $connection->getName(),
+                'level_committed'                => count($this->transactions),
+                'pending_handlers_current_level' => count($pendingHandlers),
+            ];
+
+        }
+
         array_shift($this->transactions);
         // If a wrapping transaction exists with same connection name at a level
         // above, merge pending handlers of this level with that one.
         // Else invoke this level handlers.
-        if (($level = array_search($connection->getName(), $this->transactions))) {
-            $level++;
+        if (($level = array_search($connection->getName(), $this->transactions)) and ($level !== false)) {
+            $level = count($this->transactions) - $level;
             $this->pendingHandlers[$level] = array_merge($this->pendingHandlers[$level] ?? [], $pendingHandlers);
-            $this->logger->debug('Pending handlers moved to wrapping transaction on same connection');
+
+            if ($this->isDebugMode() === true)
+            {
+                $debugData['new_level_after_shifting'] = $level;
+                $debugData['pending_handlers_new_level'] = count($this->pendingHandlers[$level]);
+            }
+
+            $this->logger->debug('Pending handlers moved to wrapping transaction on same connection', $debugData);
         } else {
             foreach ($pendingHandlers as $handler) {
                 $handler();
-                $this->logger->debug('Pending handler executed');
+                $this->logger->debug('Pending handler executed', $debugData);
             }
         }
-        $this->logger->debug('Transaction committed');
+        $this->logger->debug('Transaction committed', $debugData);
     }
 
     protected function transactionRolledBack(Connection $connection)
     {
+        $debugData = [];
+
+        if ($this->isDebugMode() === true)
+        {
+            $debugData = [
+                'connection'   => $connection->getName(),
+                'current_level' => count($this->transactions),
+            ];
+
+        }
+
         unset($this->pendingHandlers[count($this->transactions)]);
         array_shift($this->transactions);
-        $this->logger->debug('Transaction rolled back');
+
+        $this->logger->debug('Transaction rolled back', $debugData);
+    }
+
+    protected function getLimitedStackTrace()
+    {
+        $backTrace = debug_backtrace();
+        $traceData = [];
+        foreach ($backTrace as $trace)
+        {
+            if (isset($trace['class']) === true)
+            {
+                $function = $trace['class']. $trace['type']. $trace['function'];
+            }
+            else
+            {
+                $function = $trace['function'];
+            }
+
+            $line = $trace['line'] ?? 'unknown';
+            $traceData[] = $function. '---'. $line;
+        }
+        return $traceData;
+    }
+
+    protected function isDebugMode()
+    {
+        return $this->config['transaction']['debug'] === true;
     }
 }

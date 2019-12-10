@@ -17,6 +17,8 @@ return [
         // can be more than 1 database which is being used
         'testing_txn_skip_count' => env('LQEXT_TESTING_TXN_SKIP_COUNT', 1),
 
+        'debug' => false,
+
         // Whitelisted events, commands, mailable names which are to be
         // transaction aware.
         // Alternatively a class can use TransactionAware trait.
