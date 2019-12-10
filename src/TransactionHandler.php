@@ -76,14 +76,12 @@ class TransactionHandler
 
         $debugData = [];
 
-        if ($this->isDebugMode() === true)
-        {
+        if ($this->isDebugMode() === true) {
             $debugData = [
                 'trace'        => $this->getLimitedStackTrace(),
                 'connection'   => $this->transactions[0],
                 'pushed_level' => count($this->transactions),
             ];
-
         }
 
         $this->logger->debug('Pending handler pushed', $debugData);
@@ -155,13 +153,11 @@ class TransactionHandler
 
         $debugData = [];
 
-        if ($this->isDebugMode() === true)
-        {
+        if ($this->isDebugMode() === true) {
             $debugData = [
-                'connection'   => $connection->getName(),
+                'connection'    => $connection->getName(),
                 'current_level' => count($this->transactions),
             ];
-
         }
 
         $this->logger->debug('New transaction begins', $debugData);
@@ -174,14 +170,12 @@ class TransactionHandler
 
         $debugData = [];
 
-        if ($this->isDebugMode() === true)
-        {
+        if ($this->isDebugMode() === true) {
             $debugData = [
                 'connection'                     => $connection->getName(),
                 'level_committed'                => count($this->transactions),
                 'pending_handlers_current_level' => count($pendingHandlers),
             ];
-
         }
 
         array_shift($this->transactions);
@@ -194,7 +188,7 @@ class TransactionHandler
 
             if ($this->isDebugMode() === true)
             {
-                $debugData['new_level_after_shifting'] = $level;
+                $debugData['new_level_after_shifting']   = $level;
                 $debugData['pending_handlers_new_level'] = count($this->pendingHandlers[$level]);
             }
 
@@ -205,6 +199,7 @@ class TransactionHandler
                 $this->logger->debug('Pending handler executed', $debugData);
             }
         }
+
         $this->logger->debug('Transaction committed', $debugData);
     }
 
@@ -212,13 +207,11 @@ class TransactionHandler
     {
         $debugData = [];
 
-        if ($this->isDebugMode() === true)
-        {
+        if ($this->isDebugMode() === true) {
             $debugData = [
-                'connection'   => $connection->getName(),
+                'connection'    => $connection->getName(),
                 'current_level' => count($this->transactions),
             ];
-
         }
 
         unset($this->pendingHandlers[count($this->transactions)]);
@@ -236,8 +229,7 @@ class TransactionHandler
             if (isset($trace['class']) === true)
             {
                 $function = $trace['class']. $trace['type']. $trace['function'];
-            }
-            else
+            } else
             {
                 $function = $trace['function'];
             }
