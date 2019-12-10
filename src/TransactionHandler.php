@@ -186,8 +186,7 @@ class TransactionHandler
             $level = count($this->transactions) - $level;
             $this->pendingHandlers[$level] = array_merge($this->pendingHandlers[$level] ?? [], $pendingHandlers);
 
-            if ($this->isDebugMode() === true)
-            {
+            if ($this->isDebugMode() === true) {
                 $debugData['new_level_after_shifting']   = $level;
                 $debugData['pending_handlers_new_level'] = count($this->pendingHandlers[$level]);
             }
@@ -224,13 +223,10 @@ class TransactionHandler
     {
         $backTrace = debug_backtrace();
         $traceData = [];
-        foreach ($backTrace as $trace)
-        {
-            if (isset($trace['class']) === true)
-            {
+        foreach ($backTrace as $trace) {
+            if (isset($trace['class']) === true) {
                 $function = $trace['class']. $trace['type']. $trace['function'];
-            } else
-            {
+            } else {
                 $function = $trace['function'];
             }
 
